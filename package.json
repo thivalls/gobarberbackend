@@ -1,0 +1,8 @@
+{
+  "name": "typescript-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/thivalls/typescript-react-project.git",
+  "author": "valls <thiago@agenciatw.com.br>",
+  "license": "MIT"
+}
