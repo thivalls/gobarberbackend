@@ -20,10 +20,8 @@ usersRouter.post('/', async (request: Request, response: Response) => {
 
     const user = await userCreateService.execute({ name, email, password });
     return response.json(user);
-  } catch (errorCreateAppointmentService) {
-    return response
-      .status(400)
-      .json({ error: errorCreateAppointmentService.message });
+  } catch (errorCreateUserService) {
+    return response.status(400).json({ error: errorCreateUserService.message });
   }
 });
 
