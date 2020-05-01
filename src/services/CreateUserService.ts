@@ -1,7 +1,6 @@
-import { getCustomRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 
 import User from '../models/User';
-import UsersRepository from '../repositories/UsersRepository';
 
 interface Request {
   name: string;
@@ -11,21 +10,21 @@ interface Request {
 
 class CreateUserService {
   public async execute({ name, email, password }: Request): Promise<User> {
-    const userRepository = getCustomRepository(UsersRepository);
+    const usersRepository = getRepository(User);
 
-    const findUserWithSameEmail = await userRepository.findOne({
+    const checkUserExists = await usersRepository.findOne({
       where: {
         email,
       },
     });
 
-    if (findUserWithSameEmail) {
+    if (checkUserExists) {
       throw Error('This email already exists');
     }
 
-    const user = userRepository.create({ name, email, password });
+    const user = usersRepository.create({ name, email, password });
 
-    await userRepository.save(user);
+    await usersRepository.save(user);
 
     return user;
   }
