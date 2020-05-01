@@ -24,6 +24,7 @@
   ],
   "rules": {
     "prettier/prettier": "error",
+    "class-methods-use-this": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -31,7 +32,9 @@
         "ts": "never"
       }
     ],
-    "@typescript-eslint/no-unused-vars": ["error"]
+    "@typescript-eslint/no-unused-vars": [
+      "error"
+    ]
   },
   "settings": {
     "import/resolver": {
