@@ -1,12 +1,20 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { getRepository } from 'typeorm';
+import multer from 'multer';
+
+import authSession from '../middlewares/auth';
 
 import User from '../models/User';
-import CreateUserService from '../services/CreateUserService';
 
+import CreateUserService from '../services/CreateUserService';
+import AddAvatarService from '../services/AddAvatarService';
+
+import multerConfig from '../config/multer';
+
+const uploadFile = multer(multerConfig);
 const usersRouter = Router();
 
-usersRouter.get('/', async (request: Request, response: Response) => {
+usersRouter.get('/', async (request, response) => {
   const usersRepository = getRepository(User);
   const users = await usersRepository.find({
     select: ['id', 'name', 'email'],
@@ -15,7 +23,7 @@ usersRouter.get('/', async (request: Request, response: Response) => {
   return response.json(users);
 });
 
-usersRouter.post('/', async (request: Request, response: Response) => {
+usersRouter.post('/', async (request, response) => {
   try {
     const { name, email, password } = request.body;
 
@@ -30,5 +38,29 @@ usersRouter.post('/', async (request: Request, response: Response) => {
     return response.status(400).json({ error: errorCreateUserService.message });
   }
 });
+
+usersRouter.patch(
+  '/avatar',
+  authSession,
+  uploadFile.single('avatar'),
+  async (request, response) => {
+    try {
+      const avatarFilename = request.file.filename;
+      const userId = request.user.id;
+
+      const avatarService = new AddAvatarService();
+
+      const user = await avatarService.execute({ userId, avatarFilename });
+
+      delete user.password;
+
+      return response.json(user);
+    } catch (AddAvatarServiceError) {
+      return response
+        .status(400)
+        .json({ error: AddAvatarServiceError.message });
+    }
+  },
+);
 
 export default usersRouter;
