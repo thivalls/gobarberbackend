@@ -24,19 +24,15 @@ usersRouter.get('/', async (request, response) => {
 });
 
 usersRouter.post('/', async (request, response) => {
-  try {
-    const { name, email, password } = request.body;
+  const { name, email, password } = request.body;
 
-    const createUserService = new CreateUserService();
+  const createUserService = new CreateUserService();
 
-    const user = await createUserService.execute({ name, email, password });
+  const user = await createUserService.execute({ name, email, password });
 
-    delete user.password;
+  delete user.password;
 
-    return response.json(user);
-  } catch (errorCreateUserService) {
-    return response.status(400).json({ error: errorCreateUserService.message });
-  }
+  return response.json(user);
 });
 
 usersRouter.patch(
@@ -44,22 +40,16 @@ usersRouter.patch(
   authSession,
   upload.single('avatar'),
   async (request, response) => {
-    try {
-      const avatarFilename = request.file.filename;
-      const userId = request.user.id;
+    const avatarFilename = request.file.filename;
+    const userId = request.user.id;
 
-      const avatarService = new AddAvatarService();
+    const avatarService = new AddAvatarService();
 
-      const user = await avatarService.execute({ userId, avatarFilename });
+    const user = await avatarService.execute({ userId, avatarFilename });
 
-      delete user.password;
+    delete user.password;
 
-      return response.json(user);
-    } catch (AddAvatarServiceError) {
-      return response
-        .status(400)
-        .json({ error: AddAvatarServiceError.message });
-    }
+    return response.json(user);
   },
 );
 

@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
+import AppError from '../errors/AppError';
 import authConfig from '../config/auth';
 
 import User from '../models/User';
@@ -25,13 +26,13 @@ class CreateSessionService {
     });
 
     if (!user) {
-      throw new Error('Invalid Email or Password');
+      throw new AppError('Invalid Email or Password', 401);
     }
 
     const checkPassword = await compare(password, user.password);
 
     if (!checkPassword) {
-      throw new Error('Invalid Email or Password');
+      throw new AppError('Invalid Email or Password', 401);
     }
 
     const { secret, expiresIn } = authConfig.jwt;

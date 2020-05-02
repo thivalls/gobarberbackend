@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 
+import AppError from '../errors/AppError';
 import uploadConfig from '../config/upload';
 import User from '../models/User';
 
@@ -17,7 +18,7 @@ class AddAvatarService {
     const user = await userRepository.findOne(userId);
 
     if (!user) {
-      throw new Error('User not found or unauthorized');
+      throw new AppError('User not found or unauthorized', 401);
     }
 
     if (user.avatar) {
