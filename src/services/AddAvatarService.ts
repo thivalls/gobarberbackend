@@ -2,7 +2,7 @@ import { getRepository } from 'typeorm';
 import path from 'path';
 import fs from 'fs';
 
-import multerConfig from '../config/multer';
+import uploadConfig from '../config/upload';
 import User from '../models/User';
 
 interface Request {
@@ -21,7 +21,7 @@ class AddAvatarService {
     }
 
     if (user.avatar) {
-      const userAvatarFilePath = path.join(multerConfig.directory, user.avatar);
+      const userAvatarFilePath = path.join(uploadConfig.directory, user.avatar);
 
       const avatarFileExists = await fs.promises.stat(userAvatarFilePath);
 

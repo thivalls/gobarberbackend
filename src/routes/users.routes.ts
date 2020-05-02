@@ -9,9 +9,9 @@ import User from '../models/User';
 import CreateUserService from '../services/CreateUserService';
 import AddAvatarService from '../services/AddAvatarService';
 
-import multerConfig from '../config/multer';
+import uploadConfig from '../config/upload';
 
-const uploadFile = multer(multerConfig);
+const upload = multer(uploadConfig);
 const usersRouter = Router();
 
 usersRouter.get('/', async (request, response) => {
@@ -42,7 +42,7 @@ usersRouter.post('/', async (request, response) => {
 usersRouter.patch(
   '/avatar',
   authSession,
-  uploadFile.single('avatar'),
+  upload.single('avatar'),
   async (request, response) => {
     try {
       const avatarFilename = request.file.filename;
