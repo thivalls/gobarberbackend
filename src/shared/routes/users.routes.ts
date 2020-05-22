@@ -6,8 +6,8 @@ import authSession from '../middlewares/auth';
 
 import User from '../models/User';
 
-import CreateUserService from '../services/CreateUserService';
-import AddAvatarService from '../services/AddAvatarService';
+import CreateUserService from '../modules/users/services/CreateUserService';
+import AddAvatarService from '../modules/users/services/AddAvatarService';
 
 import uploadConfig from '../config/upload';
 
