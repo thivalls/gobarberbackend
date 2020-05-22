@@ -4,12 +4,12 @@ import multer from 'multer';
 
 import authSession from '../middlewares/auth';
 
-import User from '../models/User';
+import User from '../../modules/users/entities/User';
 
-import CreateUserService from '../modules/users/services/CreateUserService';
-import AddAvatarService from '../modules/users/services/AddAvatarService';
+import CreateUserService from '../../modules/users/services/CreateUserService';
+import AddAvatarService from '../../modules/users/services/AddAvatarService';
 
-import uploadConfig from '../config/upload';
+import uploadConfig from '../../config/upload';
 
 const upload = multer(uploadConfig);
 const usersRouter = Router();
