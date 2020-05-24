@@ -2,14 +2,13 @@ import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import multer from 'multer';
 
-import authSession from '../middlewares/auth';
+import User from '@modules/users/infra/typeorm/entities/User';
 
-import User from '../../../../modules/users/infra/typeorm/entities/User';
+import CreateUserService from '@modules/users/services/CreateUserService';
+import AddAvatarService from '@modules/users/services/AddAvatarService';
 
-import CreateUserService from '../../../../modules/users/services/CreateUserService';
-import AddAvatarService from '../../../../modules/users/services/AddAvatarService';
-
-import uploadConfig from '../../../../config/upload';
+import uploadConfig from '@config/upload';
+import authSession from '@modules/users/infra/http/middlewares/auth';
 
 const upload = multer(uploadConfig);
 const usersRouter = Router();
