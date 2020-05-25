@@ -1,8 +1,5 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
 import multer from 'multer';
-
-import User from '@modules/users/infra/typeorm/entities/User';
 
 import CreateUserService from '@modules/users/services/CreateUserService';
 import AddAvatarService from '@modules/users/services/AddAvatarService';
