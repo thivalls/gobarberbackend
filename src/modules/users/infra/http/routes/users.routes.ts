@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
+import { container } from 'tsyringe';
 
-import CreateUserService from '@modules/users/services/CreateUserService';
 import AddAvatarService from '@modules/users/services/AddAvatarService';
 
 import uploadConfig from '@config/upload';
@@ -13,7 +13,7 @@ const upload = multer(uploadConfig);
 const usersRouter = Router();
 
 usersRouter.get('/', async (request, response) => {
-  const usersRepository = new UsersRepository();
+  const usersRepository = container.resolve(UsersRepository);
   const users = await usersRepository.find({
     select: ['id', 'name', 'email'],
   });
@@ -24,8 +24,7 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const { name, email, password } = request.body;
 
-  const usersRepository = new UsersRepository();
-  const createUserService = new CreateUserService(usersRepository);
+  const createUserService = container.resolve(UsersRepository);
 
   const user = await createUserService.execute({ name, email, password });
 
@@ -42,8 +41,7 @@ usersRouter.patch(
     const avatarFilename = request.file.filename;
     const userId = request.user.id;
 
-    const usersRepository = new UsersRepository();
-    const avatarService = new AddAvatarService(usersRepository);
+    const avatarService = container.resolve(AddAvatarService);
 
     const user = await avatarService.execute({ userId, avatarFilename });
 
