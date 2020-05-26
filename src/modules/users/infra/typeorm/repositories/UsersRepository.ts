@@ -10,38 +10,30 @@ class UsersRepository implements IUsersRepository {
     this.ormRepository = getRepository(User);
   }
 
-  async create({ name, email, password }: IUserCreateDTO): Promise<User> {
-    const user = this.ormRepository.create({
-      name,
-      email,
-      password,
-    });
+  public async create(userData: IUserCreateDTO): Promise<User> {
+    const user = this.ormRepository.create(userData);
     await this.ormRepository.save(user);
     return user;
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
+  public async findByEmail(email: string): Promise<User | undefined> {
     const user = await this.ormRepository.findOne({
       where: { email },
     });
-
     return user;
   }
 
-  async findById(id: string): Promise<User | undefined> {
-    const user = await this.ormRepository.findOne({
-      where: { id },
-    });
-
+  public async findById(id: string): Promise<User | undefined> {
+    const user = await this.ormRepository.findOne(id);
     return user;
   }
 
-  async save(user: User): Promise<User> {
+  public async save(user: User): Promise<User> {
     await this.ormRepository.save(user);
     return user;
   }
 
-  async find(data: object): Promise<User[] | []> {
+  public async find(data: object): Promise<User[] | []> {
     const users = await this.ormRepository.find(data);
     return users;
   }
