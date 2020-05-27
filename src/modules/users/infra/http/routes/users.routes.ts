@@ -8,6 +8,7 @@ import uploadConfig from '@config/upload';
 import authSession from '@modules/users/infra/http/middlewares/auth';
 
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
+import CreateUserService from '@modules/users/services/CreateUserService';
 
 const upload = multer(uploadConfig);
 const usersRouter = Router();
@@ -24,7 +25,7 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const { name, email, password } = request.body;
 
-  const createUserService = container.resolve(UsersRepository);
+  const createUserService = container.resolve(CreateUserService);
 
   const user = await createUserService.execute({ name, email, password });
 
