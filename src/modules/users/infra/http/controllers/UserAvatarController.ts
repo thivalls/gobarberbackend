@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 
 import AddAvatarService from '@modules/users/services/AddAvatarService';
 
-export default class AvatarsController {
+export default class UserAvatarController {
   public async create(request: Request, response: Response): Promise<Response> {
     const avatarFilename = request.file.filename;
     const userId = request.user.id;
