@@ -38,10 +38,6 @@ describe('Create Session', () => {
     const fakeUsersRepository = new FakeUsersRepository();
     const fakeHashProvider = new FakeHashProvider();
 
-    const createUsersServices = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
     const createSessionService = new CreateSessionService(
       fakeUsersRepository,
       fakeHashProvider,
@@ -53,6 +49,20 @@ describe('Create Session', () => {
         password: '123456',
       }),
     ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('Should be not able to authenticate with invalid credentials', async () => {
+    const fakeUsersRepository = new FakeUsersRepository();
+    const fakeHashProvider = new FakeHashProvider();
+
+    const createUsersServices = new CreateUserService(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
+    const createSessionService = new CreateSessionService(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
 
     await createUsersServices.execute({
       name: 'John Doe',
