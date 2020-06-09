@@ -1,6 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 
 import IEmailProvider from '@shared/container/providers/MailProvider/models/IEmailProvider';
+import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
@@ -18,6 +19,11 @@ class SendForgotPasswordEmailService {
   ) {}
 
   public async execute({ email }: IRequest): Promise<void> {
+    const checkUserExists = await this.usersRepository.findByEmail(email);
+
+    if (!checkUserExists) {
+      throw new AppError('This email already exists');
+    }
     this.emailProvider.sendMail(email, 'Este é o corpo do email');
   }
 }
