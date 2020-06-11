@@ -1,8 +1,10 @@
+import { differenceInHours } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 import IUsersRepository from '../repositories/IUsersRepository';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 interface IRequest {
   token: string;
@@ -17,6 +19,9 @@ class ResetPasswordService {
 
     @inject('UserTokenRepository')
     private userTokensRepository: IUserTokensRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
   ) {}
 
   public async execute({ token, password }: IRequest): Promise<void> {
@@ -32,7 +37,15 @@ class ResetPasswordService {
       throw new AppError('User not found');
     }
 
-    user.password = password;
+    const tokenCreatedAt = userToken.created_at;
+
+    const diffHours = differenceInHours(Date.now(), tokenCreatedAt);
+
+    if (diffHours > 2) {
+      throw new AppError('User not found');
+    }
+
+    user.password = await this.hashProvider.generateHash(password);
 
     await this.usersRepository.save(user);
   }
