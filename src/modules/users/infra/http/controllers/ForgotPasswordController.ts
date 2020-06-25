@@ -11,9 +11,11 @@ export default class ForgotPasswordContoller {
       SendForgotPasswordEmailService,
     );
 
-    await sendForgotPasswordEmail.execute({
-      email,
-    });
+    console.log(sendForgotPasswordEmail);
+
+    // await sendForgotPasswordEmail.execute({
+    //   email,
+    // });
 
     return response.status(204).json();
   }

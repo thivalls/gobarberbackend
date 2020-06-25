@@ -31,7 +31,7 @@ class SendForgotPasswordEmailService {
 
     await this.userTokensRepository.generate(user.id);
 
-    this.emailProvider.sendMail(email, 'Este é o corpo do email');
+    await this.emailProvider.sendMail(email, 'Este é o corpo do email');
   }
 }
 

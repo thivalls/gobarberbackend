@@ -42,7 +42,7 @@ class ResetPasswordService {
     const diffHours = differenceInHours(Date.now(), tokenCreatedAt);
 
     if (diffHours > 2) {
-      throw new AppError('User not found');
+      throw new AppError('Token is expired');
     }
 
     user.password = await this.hashProvider.generateHash(password);
