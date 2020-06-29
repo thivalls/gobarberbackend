@@ -1,11 +1,6 @@
 import nodemailer, { Transporter } from 'nodemailer';
 import IEmailProvider from '../models/IEmailProvider';
 
-interface IMessage {
-  to: string;
-  body: string;
-}
-
 export default class EtherealMailProvider implements IEmailProvider {
   private client: Transporter;
 
