@@ -5,16 +5,23 @@ import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 
 import CreateSessionService from './CreateSessionService';
 
-describe('Create Session', () => {
-  it('Should be able to create a new session', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let createSessionService: CreateSessionService;
 
-    const createUsersServices = new CreateUserService(
+describe('Create Session', () => {
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
+
+    createSessionService = new CreateSessionService(
       fakeUsersRepository,
       fakeHashProvider,
     );
-    const createSessionService = new CreateSessionService(
+  });
+
+  it('Should be able to create a new session', async () => {
+    const createUsersServices = new CreateUserService(
       fakeUsersRepository,
       fakeHashProvider,
     );
@@ -30,20 +37,12 @@ describe('Create Session', () => {
       password: '123456',
     });
 
-    expect(response).toHaveProperty('token');
-    expect(response.user).toEqual(user);
+    await expect(response).toHaveProperty('token');
+    await expect(response.user).toEqual(user);
   });
 
   it('Should be not able to authenticate with a non existing user', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    const createSessionService = new CreateSessionService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
-    expect(
+    await expect(
       createSessionService.execute({
         email: 'johndoe@jest.com.br',
         password: '123456',
@@ -52,14 +51,7 @@ describe('Create Session', () => {
   });
 
   it('Should be not able to authenticate with invalid credentials', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
     const createUsersServices = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-    const createSessionService = new CreateSessionService(
       fakeUsersRepository,
       fakeHashProvider,
     );
@@ -70,7 +62,7 @@ describe('Create Session', () => {
       password: '123456',
     });
 
-    expect(
+    await expect(
       createSessionService.execute({
         email: 'johndoe@jest.com.br',
         password: '1234567',

@@ -3,48 +3,44 @@ import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import CreateUserService from './CreateUserService';
 
-describe('CreateUser', () => {
-  it('Should be able to create a new user', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-    const createUsersServices = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let createUser: CreateUserService;
 
-    const user = await createUsersServices.execute({
+describe('CreateUser', () => {
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeHashProvider = new FakeHashProvider();
+    createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+  });
+
+  it('Should be able to create a new user', async () => {
+    const user = await createUser.execute({
       name: 'Thiago',
       email: 'teste@jest.com.br',
       password: '123456',
     });
 
-    expect(user).toHaveProperty('id');
+    await expect(user).toHaveProperty('id');
   });
 
   it('Should not be able to create user with same email', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
-    const createUsersServices = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
-    await createUsersServices.execute({
+    await createUser.execute({
       name: 'Thiago',
       email: 'teste@jest.com.br',
       password: '123456',
     });
 
-    expect(
-      createUsersServices.execute({
+    await expect(
+      createUser.execute({
         name: 'Thiago',
         email: 'teste@jest.com.br',
         password: '123456',
       }),
     ).rejects.toBeInstanceOf(AppError);
 
-    expect(
-      createUsersServices.execute({
+    await expect(
+      createUser.execute({
         name: 'Thiago',
         email: 'teste@jest.com.br',
         password: '123456',
