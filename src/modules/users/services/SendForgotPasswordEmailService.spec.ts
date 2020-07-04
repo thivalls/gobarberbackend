@@ -35,10 +35,6 @@ describe('SendForgotPasswordEmail', () => {
     });
 
     expect(sendMail).toHaveBeenCalled();
-    expect(sendMail).toHaveBeenCalledWith(
-      'johndoe@example.com',
-      'Este é o corpo do email',
-    );
   });
 
   it('Should not be able to recover password from non-existing user', async () => {
